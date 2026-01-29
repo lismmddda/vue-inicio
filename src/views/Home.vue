@@ -30,7 +30,7 @@
 
     <img :src="rival.imagen" class="pokemon pc-img" />
     <h4>{{ rival.nombre }}</h4>
-    <p>❤️ {{ rival.vida }}</p>
+    <p> {{ rival.vida }}</p>
 
     <button class="btn-batalla" disabled>Atacar</button>
   </div>
@@ -151,31 +151,29 @@ const turno = ref('jugador')
 =============================== */
 const amigosIds = ref([])
 
-/* 👉 SOLO AMIGOS QUE ESTÁN ONLINE */
+
 const amigosOnline = computed(() => {
   return usuarios.value.filter(u =>
     amigosIds.value.includes(u.id)
   )
 })
 
-/* ===============================
-   SESIÓN + SOCKET
-=============================== */
+
 onMounted(async () => {
   const usuarioLS = localStorage.getItem('usuario')
 
   if (!usuarioLS) {
-    mensaje.value = '⚠️ Debes iniciar sesión'
+    mensaje.value = ' Debes iniciar sesión'
     setTimeout(() => router.push('/login'), 1500)
     return
   }
 
   usuarioLogueado.value = JSON.parse(usuarioLS)
 
-  /* 🔎 CARGAR AMIGOS */
+
   await cargarAmigos()
 
-  /* 🔌 SOCKET */
+ 
   socket.connect()
   socket.emit('registrar', usuarioLogueado.value.id)
 
@@ -248,9 +246,7 @@ const seleccionarModo = () => {
   mostrarModal.value = false
 }
 
-/* ===============================
-   BATALLA LOCAL
-=============================== */
+
 const iniciarBatalla = async () => {
   const j = JSON.parse(localStorage.getItem('pokemonJugador'))
   const r = JSON.parse(localStorage.getItem('pokemonPC'))
@@ -281,7 +277,7 @@ const atacarJugador = () => {
 
 const atacarRival = () => {
   jugador.value.vida -= Math.max(5, rival.value.ataque / 3)
-  if (jugador.value.vida <= 0) terminar('💀 Perdiste')
+  if (jugador.value.vida <= 0) terminar('Perdiste')
 
   turno.value = 'jugador'
 }

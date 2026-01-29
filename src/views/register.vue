@@ -80,7 +80,7 @@ const togglePassword = () => {
 }
 
 const registrarUsuario = async () => {
-  mensaje.value = 'Registrando... ⏳'
+  mensaje.value = 'Registrando... '
 
   try {
     const response = await fetch('http://localhost:3000/api/auth/register', {
