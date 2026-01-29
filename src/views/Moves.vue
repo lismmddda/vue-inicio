@@ -1,6 +1,6 @@
 <template>
   <div class="contenedor">
-    <h1 class="titulo">📜 Movimientos</h1>
+    <h1 class="titulo"> Movimientos</h1>
 
     <!-- SIN POKEMON -->
     <p v-if="!pokemonJugador" class="alerta">
@@ -46,7 +46,7 @@
     </router-link>
 
     <router-link to="/characters" class="volver">
-      ⬅ Volver a Pokédex
+       Volver a Pokédex
     </router-link>
   </div>
 </template>

@@ -94,9 +94,7 @@ const tipoSeleccion = ref('jugador') // jugador | amigo
 const totalPokemons = ref(null)
 
 
-/* =======================
-   OBTENER TOTAL (DINÁMICO)
-======================= */
+
 const obtenerTotal = async () => {
   try {
     const guardado = localStorage.getItem('totalPokemons')
@@ -117,22 +115,19 @@ const obtenerTotal = async () => {
 }
 
 
-/* =======================
-   CARGAR POKÉMON
-======================= */
+
 const cargarMas = async () => {
 
-  // 🔒 Bloqueo si ya se cargaron todos
   if (
     totalPokemons.value &&
     pokemons.value.length >= totalPokemons.value
   ) {
-    console.log('✅ Todos los Pokémon ya fueron cargados')
+    console.log(' Todos los Pokémon ya fueron cargados')
     return
   }
 
   if (!navigator.onLine && pokedexNacional.value.length === 0) {
-    console.warn('📴 Sin conexión y sin datos cacheados')
+    console.warn(' Sin conexión y sin datos cacheados')
     return
   }
 
@@ -141,7 +136,7 @@ const cargarMas = async () => {
 
   try {
 
-    // 🔹 Cargar Pokédex Nacional UNA SOLA VEZ
+
     if (pokedexNacional.value.length === 0) {
       const res = await fetch(
         'https://pokeapi.co/api/v2/pokedex/national'
@@ -184,9 +179,6 @@ const cargarMas = async () => {
 }
 
 
-/* =======================
-   MODAL
-======================= */
 const abrirModal = async (pokemon) => {
   pokemonSeleccionado.value = pokemon
   mostrarModal.value = true
@@ -215,9 +207,7 @@ const cerrarModal = () => {
 }
 
 
-/* =======================
-   MOVIMIENTOS
-======================= */
+
 const toggleMove = (move) => {
   if (movimientosSeleccionados.value.includes(move)) {
     movimientosSeleccionados.value =
@@ -262,9 +252,7 @@ const guardarSeleccion = () => {
 }
 
 
-/* =======================
-   MARCAR SELECCIONADOS
-======================= */
+
 const esSeleccionado = (id) => {
   const jugador = JSON.parse(localStorage.getItem('pokemonJugador'))
   const amigo = JSON.parse(localStorage.getItem('pokemonAmigo'))
@@ -288,7 +276,7 @@ onMounted(async () => {
 
 
 <style scoped>
-/* ⚠️ CSS COMPLETO ORIGINAL — NO SE TOCÓ NADA */
+
 .contenedor {
   min-height: 100vh;
   padding: 20px;

@@ -1,6 +1,6 @@
 <template>
   <div class="stats-page">
-    <h1>📊 Estadísticas Pokémon</h1>
+    <h1> Estadísticas Pokémon</h1>
 
     <!-- GRID -->
     <div class="pokemon-grid">
@@ -43,7 +43,7 @@
 
         <!-- REGION -->
         <p class="region">
-          🗺️ Región: <strong>{{ region }}</strong>
+           Región: <strong>{{ region }}</strong>
         </p>
 
         <!-- TIPOS -->
@@ -59,7 +59,7 @@
 
         <!-- EVOLUCION -->
         <p class="evo">
-          🧬 Evolución:
+          Evolución:
           <strong>
             {{ evoluciona ? 'Sí evoluciona' : 'No evoluciona' }}
           </strong>

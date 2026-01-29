@@ -87,19 +87,18 @@ const login = async () => {
     const data = await res.json()
 
     if (!data.ok) {
-      mensaje.value = '❌ Credenciales incorrectas'
+      mensaje.value = ' Credenciales incorrectas'
       return
     }
 
-    // ✅ Guarda el usuario logueado
+
     localStorage.setItem('usuario', JSON.stringify(data.user))
 
-    mensaje.value = `✅ Bienvenido ${data.user.nombre}`
+    mensaje.value = ` Bienvenido ${data.user.nombre}`
 
-    // ✅ Redirige al inicio
     router.push('/')
   } catch (error) {
-    mensaje.value = '❌ Error al conectar con el servidor'
+    mensaje.value = 'Error al conectar con el servidor'
     console.error(error)
   }
 }

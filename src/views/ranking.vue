@@ -3,7 +3,7 @@
     <h2>Ranking</h2>
 
     <div v-for="r in ranking" :key="r.nombre">
-      🏅 {{ r.nombre }} - {{ r.victorias }} victorias
+      {{ r.nombre }} - {{ r.victorias }} victorias
     </div>
   </div>
 </template>

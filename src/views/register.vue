@@ -101,11 +101,11 @@ const registrarUsuario = async () => {
     const data = await response.json()
 
     if (!response.ok) {
-      mensaje.value = `❌ ${data.message}`
+      mensaje.value = ` ${data.message}`
       return
     }
 
-    mensaje.value = '✅ Registro exitoso'
+    mensaje.value = ' Registro exitoso'
 
     setTimeout(() => {
       router.push('/login')
@@ -113,13 +113,13 @@ const registrarUsuario = async () => {
 
   } catch (error) {
     console.error(error)
-    mensaje.value = '❌ Error al conectar con el servidor'
+    mensaje.value = ' Error al conectar con el servidor'
   }
 }
 </script>
 
 <style scoped>
-/* Fondo amigable */
+
 .register-wrapper {
   min-height: 100vh;
   display: flex;
