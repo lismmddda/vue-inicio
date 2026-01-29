@@ -1,0 +1,53 @@
+body {
+  background: linear-gradient(#f5f7fa, #c3cfe2);
+  font-family: Arial, sans-serif;
+}
+
+.contenedor {
+  text-align: center;
+  padding: 20px;
+}
+
+.arena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.lado {
+  margin: 20px;
+}
+
+.pokemon-img {
+  width: 120px;
+}
+
+.animar {
+  animation: flotar 1.5s infinite alternate;
+}
+
+@keyframes flotar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+.vs {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+}
+
+.mensaje {
+  font-size: 18px;
+  font-weight: bold;
+}
