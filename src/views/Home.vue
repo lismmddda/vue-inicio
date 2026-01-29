@@ -11,7 +11,7 @@
 
     <img :src="jugador.imagen" class="pokemon jugador-img" />
     <h4>{{ jugador.nombre }}</h4>
-    <p>❤️ {{ jugador.vida }}</p>
+    <p>{{ jugador.vida }}</p>
 
     <button
       class="btn-batalla"
