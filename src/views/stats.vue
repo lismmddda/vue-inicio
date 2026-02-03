@@ -1,23 +1,39 @@
 <template>
-  <div class="stats-page">
-    <h1> Estadísticas Pokémon</h1>
+  <div class="p-4 text-center min-h-screen bg-gray-100">
+
+    <!-- TÍTULO -->
+    <h1 class="text-2xl font-bold mb-4">
+      <i class="bi bi-bar-chart-fill me-1"></i>
+      Estadísticas Pokémon
+    </h1>
 
     <!-- GRID -->
-    <div class="pokemon-grid">
+    <div
+      class="grid gap-4"
+      style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));"
+    >
       <div
         v-for="p in pokemons"
         :key="p.id"
-        class="pokemon-card"
         @click="openModal(p)"
+        class="bg-white rounded-2xl p-3 shadow-md cursor-pointer
+               transition hover:scale-105"
       >
-        <img :src="p.sprites.front_default" />
-        <h3>{{ p.name }}</h3>
+        <img
+          :src="p.sprites.front_default"
+          class="mx-auto w-20"
+        />
 
-        <div class="types">
+        <h3 class="font-bold capitalize mt-1">
+          {{ p.name }}
+        </h3>
+
+        <!-- TIPOS -->
+        <div class="flex gap-1 justify-center mt-1">
           <span
             v-for="t in p.types"
             :key="t.type.name"
-            class="type"
+            class="bg-gray-200 px-2 py-1 rounded-full text-[11px] capitalize"
           >
             {{ t.type.name }}
           </span>
@@ -25,40 +41,67 @@
       </div>
     </div>
 
-    <!-- VER MAS -->
-    <button class="btn-cargar" @click="cargarMas" :disabled="cargando">
+    <!-- VER MÁS -->
+    <button
+      @click="cargarMas"
+      :disabled="cargando"
+      class="mt-4 px-8 py-3 rounded-xl font-bold
+             bg-yellow-400 hover:bg-yellow-500 transition
+             disabled:opacity-50"
+    >
+      <i class="bi bi-arrow-repeat me-1"></i>
       {{ cargando ? 'Cargando...' : 'Ver más Pokémon' }}
     </button>
 
     <!-- MODAL -->
-    <div v-if="selectedPokemon" class="modal-overlay" @click.self="closeModal">
-      <div class="modal">
-        <button class="close" @click="closeModal">✖</button>
+    <div
+      v-if="selectedPokemon"
+      class="fixed inset-0 bg-black/60
+             flex items-center justify-center z-50"
+      @click.self="closeModal"
+    >
+      <div
+        class="bg-white w-[90%] max-w-[400px]
+               max-h-[90vh] overflow-y-auto
+               p-5 rounded-2xl relative"
+      >
+        <!-- CERRAR -->
+        <button
+          @click="closeModal"
+          class="absolute top-3 right-3 text-lg"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
 
-        <h2>{{ selectedPokemon.name }}</h2>
+        <!-- INFO -->
+        <h2 class="text-xl font-bold capitalize">
+          {{ selectedPokemon.name }}
+        </h2>
+
         <img
           :src="selectedPokemon.sprites.front_default"
-          class="modal-img"
+          class="mx-auto w-32 my-2"
         />
 
         <!-- REGION -->
-        <p class="region">
-           Región: <strong>{{ region }}</strong>
+        <p class="my-2 font-bold">
+          Región:
+          <strong>{{ region }}</strong>
         </p>
 
         <!-- TIPOS -->
-        <div class="types">
+        <div class="flex gap-2 justify-center mb-2">
           <span
             v-for="t in selectedPokemon.types"
             :key="t.type.name"
-            class="type"
+            class="bg-gray-200 px-2 py-1 rounded-full text-xs capitalize"
           >
             {{ t.type.name }}
           </span>
         </div>
 
-        <!-- EVOLUCION -->
-        <p class="evo">
+        <!-- EVOLUCIÓN -->
+        <p class="my-2 font-bold">
           Evolución:
           <strong>
             {{ evoluciona ? 'Sí evoluciona' : 'No evoluciona' }}
@@ -66,40 +109,52 @@
         </p>
 
         <!-- HABILIDADES -->
-        <h3>Habilidades</h3>
-        <ul class="abilities">
+        <h3 class="font-bold mt-3">Habilidades</h3>
+        <ul class="my-2">
           <li
             v-for="a in selectedPokemon.abilities"
             :key="a.ability.name"
+            class="capitalize text-sm"
           >
-            {{ a.ability.name }}
+            • {{ a.ability.name }}
           </li>
         </ul>
 
         <!-- STATS -->
-        <h3>Estadísticas</h3>
-        <div class="stats">
+        <h3 class="font-bold mt-3">Estadísticas</h3>
+        <div class="mt-2">
           <div
             v-for="s in selectedPokemon.stats"
             :key="s.stat.name"
+            class="mb-2"
           >
-            <label>{{ s.stat.name.toUpperCase() }}</label>
-            <div class="bar">
+            <label class="text-xs font-bold">
+              {{ s.stat.name.toUpperCase() }}
+            </label>
+
+            <div class="bg-gray-300 h-2 rounded-full">
               <div
-                class="bar-fill"
+                class="bg-red-500 h-2 rounded-full"
                 :style="{ width: s.base_stat + '%' }"
               ></div>
             </div>
           </div>
         </div>
 
-        <button class="btn-cerrar" @click="closeModal">
+        <!-- CERRAR -->
+        <button
+          @click="closeModal"
+          class="w-full mt-4 py-3 rounded-xl font-bold
+                 bg-yellow-400 hover:bg-yellow-500 transition"
+        >
           Cerrar
         </button>
       </div>
     </div>
+
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -177,127 +232,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.stats-page {
-  padding: 15px;
-  text-align: center;
-}
-
-.pokemon-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 15px;
-}
-
-.pokemon-card {
-  background: white;
-  border-radius: 15px;
-  padding: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.1);
-  cursor: pointer;
-}
-
-.pokemon-card img {
-  width: 80px;
-}
-
-.types {
-  display: flex;
-  gap: 5px;
-  justify-content: center;
-  margin-bottom: 5px;
-}
-
-.type {
-  background: #eee;
-  padding: 4px 8px;
-  border-radius: 10px;
-  font-size: 11px;
-  text-transform: capitalize;
-}
-
-.region {
-  margin: 8px 0;
-  font-weight: bold;
-}
-
-.abilities {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0;
-}
-
-.abilities li {
-  text-transform: capitalize;
-}
-
-.btn-cargar {
-  margin: 15px 0;
-  padding: 12px 30px;
-  background: #ffcb05;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-/* MODAL */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal {
-  background: white;
-  width: 90%;
-  max-width: 400px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  border-radius: 16px;
-}
-
-.close {
-  float: right;
-  border: none;
-  background: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.modal-img {
-  width: 120px;
-  margin: 10px 0;
-}
-
-.evo {
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-/* STATS */
-.bar {
-  background: #ddd;
-  height: 8px;
-  border-radius: 10px;
-  margin-bottom: 6px;
-}
-
-.bar-fill {
-  background: #ef5350;
-  height: 100%;
-}
-
-.btn-cerrar {
-  width: 100%;
-  margin-top: 10px;
-  background: #ffcb05;
-  border: none;
-  padding: 10px;
-  border-radius: 12px;
-  font-weight: bold;
-}
-</style>

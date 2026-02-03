@@ -5,6 +5,8 @@ import Characters from '../views/Characters.vue'
 import Stats from '../views/stats.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/register.vue'
+import '../assets/main.css'
+
 
 const routes = [
   {

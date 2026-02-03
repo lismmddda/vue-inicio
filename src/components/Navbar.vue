@@ -1,45 +1,71 @@
 <template>
-  <nav class="navbar">
+  <nav
+    class="fixed top-0 left-0 right-0 z-50
+           flex justify-around items-center
+           bg-red-500 text-white
+           py-2 shadow-lg"
+  >
     <!-- USUARIO -->
-    <div v-if="usuario" class="user">
-      <i class="fas fa-user-circle"></i>
+    <div
+      v-if="usuario"
+      class="flex flex-col items-center text-xs font-bold"
+    >
+      <i class="fas fa-user-circle text-xl"></i>
       <span>{{ usuario.nombre }}</span>
     </div>
 
     <!-- BATALLA -->
-    <router-link to="/">
-      <i class="fas fa-bolt"></i>
+    <router-link
+      to="/"
+      class="flex flex-col items-center gap-1 text-xs font-bold
+             hover:text-yellow-300 transition"
+    >
+      <i class="fas fa-bolt text-xl"></i>
       <span>Batalla</span>
     </router-link>
 
-    <router-link to="/characters">
-      <i class="fas fa-book"></i>
+    <!-- POKEDEX -->
+    <router-link
+      to="/characters"
+      class="flex flex-col items-center gap-1 text-xs font-bold
+             hover:text-yellow-300 transition"
+    >
+      <i class="fas fa-book text-xl"></i>
       <span>Pokedex</span>
     </router-link>
 
-    <router-link to="/stats">
-      <i class="fas fa-chart-bar"></i>
-      <span>Estadísticas</span>
+    <!-- ESTADÍSTICAS -->
+    <router-link
+      to="/stats"
+      class="flex flex-col items-center gap-1 text-xs font-bold
+             hover:text-yellow-300 transition"
+    >
+      <i class="fas fa-chart-bar text-xl"></i>
+      <span>Stats</span>
     </router-link>
 
     <!-- LOGOUT -->
     <button
       v-if="usuario"
-      class="logout"
       @click="cerrarSesion"
       title="Cerrar sesión"
+      class="hover:text-gray-200 transition"
     >
-      <i class="fas fa-sign-out-alt"></i>
+      <i class="fas fa-sign-out-alt text-xl"></i>
     </button>
 
-    <!-- LOGIN (solo si NO está logueado) -->
-    <router-link v-else to="/login">
-      <i class="fas fa-user-shield"></i>
+    <!-- LOGIN -->
+    <router-link
+      v-else
+      to="/login"
+      class="flex flex-col items-center gap-1 text-xs font-bold
+             hover:text-yellow-300 transition"
+    >
+      <i class="fas fa-user-shield text-xl"></i>
       <span>Login</span>
     </router-link>
   </nav>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -61,54 +87,8 @@ const cerrarSesion = () => {
 onMounted(() => {
   cargarUsuario()
 
-  // 🔄 Detecta cambios de ruta (login / logout)
   router.afterEach(() => {
     cargarUsuario()
   })
 })
 </script>
-
-<style scoped>
-.navbar {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: #ef5350;
-  padding: 10px;
-}
-
-.user {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-a {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-.logout {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-.logout i {
-  font-size: 20px;
-}
-
-i {
-  font-size: 20px;
-}
-</style>

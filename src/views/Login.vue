@@ -1,60 +1,87 @@
 <template>
-  <div class="login-wrapper">
-    <div class="login-container">
-      <h1 class="titulo">
-        <i class="bi bi-box-arrow-in-right"></i> Acceso
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#ffecd2] to-[#fcb69f] font-sans">
+    <div class="bg-white p-9 w-full max-w-[380px] rounded-[18px] shadow-2xl text-center">
+
+      <h1 class="mb-6 text-[#ef5350] text-2xl font-bold flex items-center justify-center gap-2">
+        <i class="bi bi-box-arrow-in-right"></i>
+        Acceso
       </h1>
 
-      <form @submit.prevent="login">
+      <form @submit.prevent="login" class="space-y-4">
+
         <!-- EMAIL -->
-        <div class="input-group">
-          <i class="bi bi-envelope-fill icon"></i>
+        <div class="flex items-center border border-gray-300 rounded-xl px-3">
+          <i class="bi bi-envelope-fill text-[#ef5350] text-lg mr-2"></i>
           <input
             type="email"
             v-model="email"
             placeholder="Correo electrónico"
             required
+            class="flex-1 py-3 outline-none text-sm"
           />
         </div>
 
         <!-- PASSWORD -->
-        <div class="input-group">
-          <i class="bi bi-lock-fill icon"></i>
+        <div class="flex items-center border border-gray-300 rounded-xl px-3">
+          <i class="bi bi-lock-fill text-[#ef5350] text-lg mr-2"></i>
+
           <input
             :type="mostrarPassword ? 'text' : 'password'"
             v-model="password"
             placeholder="Contraseña"
             required
+            class="flex-1 py-3 outline-none text-sm"
           />
+
           <i
-            class="bi eye"
+            class="bi cursor-pointer text-gray-500 text-lg"
             :class="mostrarPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
             @click="togglePassword"
           ></i>
         </div>
 
         <!-- BOTÓN LOGIN -->
-        <button type="submit" class="btn-login">
-          <i class="bi bi-door-open-fill"></i> Iniciar sesión
+        <button
+          type="submit"
+          class="w-full py-3 bg-[#ef5350] hover:bg-[#d32f2f] text-white font-bold rounded-xl text-lg transition"
+        >
+          <i class="bi bi-door-open-fill"></i>
+          Iniciar sesión
         </button>
+
       </form>
 
-      <p class="mensaje">{{ mensaje }}</p>
+      <!-- MENSAJE -->
+      <p class="mt-4 font-bold text-red-600">
+        {{ mensaje }}
+      </p>
 
       <!-- REGISTRO -->
-      <div class="registro">
-        <p>¿No tienes cuenta?</p>
-        <router-link to="/register" class="btn-register">
-          <i class="bi bi-person-plus-fill"></i> Registrarse
+      <div class="mt-5">
+        <p class="mb-2">¿No tienes cuenta?</p>
+
+        <router-link
+          to="/register"
+          class="inline-block px-5 py-2 bg-green-500 hover:bg-green-700 text-white font-bold rounded-xl transition"
+        >
+          <i class="bi bi-person-plus-fill"></i>
+          Registrarse
         </router-link>
       </div>
 
-      <router-link to="/" class="volver">
-        <i class="bi bi-arrow-left"></i> Volver al inicio
+      <!-- VOLVER -->
+      <router-link
+        to="/"
+        class="block mt-5 font-bold text-gray-700 hover:underline"
+      >
+        <i class="bi bi-arrow-left"></i>
+        Volver al inicio
       </router-link>
+
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from 'vue'
@@ -104,105 +131,3 @@ const login = async () => {
 }
 </script>
 
-<style scoped>
-.login-wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
-  font-family: Arial, sans-serif;
-}
-
-.login-container {
-  background: white;
-  padding: 35px;
-  width: 100%;
-  max-width: 380px;
-  border-radius: 18px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-  text-align: center;
-}
-
-.titulo {
-  margin-bottom: 25px;
-  color: #ef5350;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 0 12px;
-  margin-bottom: 18px;
-}
-
-.icon {
-  font-size: 1.2rem;
-  color: #ef5350;
-  margin-right: 8px;
-}
-
-.eye {
-  font-size: 1.2rem;
-  color: #777;
-  cursor: pointer;
-}
-
-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 12px 0;
-  font-size: 14px;
-}
-
-.btn-login {
-  width: 100%;
-  padding: 14px;
-  background: #ef5350;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.btn-login:hover {
-  background: #d32f2f;
-}
-
-.mensaje {
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-.registro {
-  margin-top: 20px;
-}
-
-.btn-register {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 10px 20px;
-  background: #4caf50;
-  color: white;
-  border-radius: 12px;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.btn-register:hover {
-  background: #388e3c;
-}
-
-.volver {
-  display: block;
-  margin-top: 20px;
-  text-decoration: none;
-  font-weight: bold;
-  color: #333;
-}
-</style>

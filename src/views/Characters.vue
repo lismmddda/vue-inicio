@@ -1,68 +1,144 @@
 <template>
-  <div class="contenedor">
-    <h1 class="titulo">📟 Pokédex</h1>
+  <div class="min-h-screen p-5 bg-gray-100 text-center font-sans">
 
-    <!-- JUGADOR ACTUAL -->
-    <div v-if="usuarioLogueado" class="usuario-logueado">
-      👤 Jugador actual:
-      <strong>{{ usuarioLogueado.nombre }}</strong>
+    <!-- TÍTULO -->
+    <h1 class="mb-4 text-2xl font-bold">
+      <i class="bi bi-collection me-1"></i>
+      Pokédex
+    </h1>
+
+    <!-- USUARIO LOGUEADO -->
+    <div
+      v-if="usuarioLogueado"
+      class="mb-3 inline-flex items-center gap-2
+             bg-white px-4 py-2 rounded-xl shadow-md text-sm"
+    >
+      <i class="bi bi-person-circle text-lg"></i>
+      <span>
+        Jugador actual:
+        <strong>{{ usuarioLogueado.nombre }}</strong>
+      </span>
     </div>
 
     <!-- GRID POKEDEX -->
-    <div class="pokedex">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <div
         v-for="p in pokemons"
         :key="p.id"
-        class="pokemon-card"
-        :class="{ seleccionado: esSeleccionado(p.id) }"
         @click="abrirModal(p)"
+        class="bg-white rounded-2xl p-3 shadow-md cursor-pointer
+               transition hover:scale-105"
+        :class="{
+          'border-4 border-green-500': esSeleccionado(p.id)
+        }"
       >
-        <img :src="p.sprites.front_default" />
-        <p class="nombre">{{ p.name }}</p>
-        <span class="id">#{{ p.id }}</span>
+        <img
+          :src="p.sprites.front_default"
+          class="mx-auto w-[90px]"
+        />
+
+        <p class="font-bold capitalize mt-2">
+          {{ p.name }}
+        </p>
+
+        <span class="text-xs text-gray-500">
+          #{{ p.id }}
+        </span>
       </div>
     </div>
 
-    <!-- BOTON CARGAR -->
-    <button class="btn-cargar" @click="cargarMas" :disabled="cargando">
+    <!-- BOTÓN CARGAR -->
+    <button
+      class="mt-4 px-8 py-3 text-lg rounded-xl bg-yellow-400
+             hover:bg-yellow-500 transition disabled:opacity-50"
+      @click="cargarMas"
+      :disabled="cargando"
+    >
+      <i class="bi bi-arrow-repeat me-1"></i>
       {{ cargando ? 'Cargando...' : 'Cargar más Pokémon' }}
     </button>
 
     <!-- MODAL -->
-    <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
-      <div class="modal">
-        <button class="cerrar" @click="cerrarModal">✖</button>
+    <div
+      v-if="mostrarModal"
+      class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+      @click.self="cerrarModal"
+    >
+      <div
+        class="bg-white w-[90%] max-w-[500px] max-h-[90vh]
+               overflow-y-auto p-5 rounded-2xl relative"
+      >
+        <!-- CERRAR -->
+        <button
+          class="absolute top-3 right-3 text-lg"
+          @click="cerrarModal"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
 
-        <div v-if="pokemonSeleccionado" class="pokemon-info">
-          <img :src="pokemonSeleccionado.sprites.front_default" />
-          <h2>{{ pokemonSeleccionado.name }}</h2>
-          <p>Selecciona hasta 4 movimientos</p>
+        <!-- INFO POKEMON -->
+        <div
+          v-if="pokemonSeleccionado"
+          class="text-center"
+        >
+          <img
+            :src="pokemonSeleccionado.sprites.front_default"
+            class="mx-auto w-[120px]"
+          />
+
+          <h2 class="text-xl font-bold capitalize">
+            {{ pokemonSeleccionado.name }}
+          </h2>
+
+          <p class="text-sm mt-1">
+            Selecciona hasta 4 movimientos
+          </p>
         </div>
 
         <!-- MOVIMIENTOS -->
-        <div class="moves-grid">
+        <div class="grid grid-cols-2 gap-3 my-4">
           <div
             v-for="m in movimientos"
             :key="m.move.name"
-            class="move-card"
-            :class="{ activo: movimientosSeleccionados.includes(m.move.name) }"
             @click="toggleMove(m.move.name)"
+            class="bg-gray-200 p-2 rounded-xl cursor-pointer
+                   capitalize text-sm transition"
+            :class="{
+              'bg-green-500 text-white':
+                movimientosSeleccionados.includes(m.move.name)
+            }"
           >
             {{ m.move.name }}
           </div>
         </div>
 
-        <p class="contador">
+        <!-- CONTADOR -->
+        <p class="font-bold mb-3">
+          <i class="bi bi-check2-circle me-1"></i>
           Seleccionados: {{ movimientosSeleccionados.length }}/4
         </p>
 
-        <button class="btn-guardar" @click="guardarSeleccion">
+        <!-- GUARDAR -->
+        <button
+          class="sticky bottom-2 px-6 py-3 rounded-xl bg-yellow-400
+                 hover:bg-yellow-500 transition"
+          @click="guardarSeleccion"
+        >
+          <i class="bi bi-save me-1"></i>
           Guardar selección
         </button>
       </div>
     </div>
 
-    <router-link to="/" class="volver">⬅ Volver</router-link>
+    <!-- VOLVER -->
+    <router-link
+      to="/"
+      class="block mt-4 font-bold hover:underline"
+    >
+      <i class="bi bi-arrow-left"></i>
+      Volver
+    </router-link>
+
   </div>
 </template>
 
@@ -275,155 +351,3 @@ onMounted(async () => {
 
 
 
-<style scoped>
-
-.contenedor {
-  min-height: 100vh;
-  padding: 20px;
-  background: #f2f2f2;
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-
-.titulo {
-  margin-bottom: 15px;
-}
-
-.selector button {
-  margin: 5px;
-  padding: 10px 20px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background: #ddd;
-}
-
-.selector .activo {
-  background: #4caf50;
-  color: white;
-}
-
-.pokedex {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-}
-
-.pokemon-card {
-  background: white;
-  border-radius: 15px;
-  padding: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  cursor: pointer;
-}
-
-.pokemon-card.seleccionado {
-  border: 3px solid #4caf50;
-}
-
-.pokemon-card img {
-  width: 90px;
-}
-
-.nombre {
-  font-weight: bold;
-  text-transform: capitalize;
-}
-
-.id {
-  font-size: 12px;
-  color: gray;
-}
-
-.btn-cargar {
-  margin: 15px 0;
-  padding: 12px 30px;
-  font-size: 16px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  background: #ffcb05;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal {
-  background: white;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  border-radius: 16px;
-  position: relative;
-}
-
-.cerrar {
-  position: sticky;
-  top: 10px;
-  float: right;
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.moves-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin: 15px 0;
-}
-
-.move-card {
-  background: #f2f2f2;
-  padding: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-transform: capitalize;
-}
-
-.move-card.activo {
-  background: #4caf50;
-  color: white;
-}
-
-.contador {
-  font-weight: bold;
-}
-
-.btn-guardar {
-  background: #ffcb05;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 12px;
-  cursor: pointer;
-  position: sticky;
-  bottom: 10px;
-}
-
-.volver {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
-  text-decoration: none;
-}
-.usuario-logueado {
-  margin-bottom: 12px;
-  font-size: 15px;
-  background: #ffffff;
-  padding: 8px 12px;
-  border-radius: 10px;
-  display: inline-block;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-}
-
-</style>

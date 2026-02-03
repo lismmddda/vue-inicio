@@ -1,118 +1,166 @@
 <template>
-
   <!-- CONTENEDOR -->
-  <div class="contenedor">
+  <div class="min-h-screen pt-[90px] px-5 font-sans">
 
     <!-- ARENA -->
-<div v-if="enBatalla && jugador && rival" class="arena">
-  <!-- LADO JUGADOR -->
-  <div class="lado usuario">
-    <h3> {{ usuarioLogueado?.nombre }}</h3>
-
-    <img :src="jugador.imagen" class="pokemon jugador-img" />
-    <h4>{{ jugador.nombre }}</h4>
-    <p>{{ jugador.vida }}</p>
-
-    <button
-      class="btn-batalla"
-      @click="atacarJugador"
-      :disabled="turno !== 'jugador'"
+    <div
+      v-if="enBatalla && jugador && rival"
+      class="flex justify-between items-end p-8 min-h-[340px] rounded-2xl
+             bg-gradient-to-t from-green-500 via-green-400 to-sky-300
+             shadow-inner"
     >
-      Atacar
-    </button>
-  </div>
+      <!-- LADO JUGADOR -->
+      <div class="flex flex-col items-center self-end text-center">
+        <h3 class="font-bold mb-2">
+          {{ usuarioLogueado?.nombre }}
+        </h3>
 
-  <div class="vs">VS</div>
+        <img
+          :src="jugador.imagen"
+          class="w-[120px] drop-shadow-xl scale-x-[-1]"
+        />
 
-  <!-- LADO PC -->
-  <div class="lado pc">
-    <h3> Oponente</h3>
+        <h4 class="font-bold mt-2">{{ jugador.nombre }}</h4>
+        <p>{{ jugador.vida }}</p>
 
-    <img :src="rival.imagen" class="pokemon pc-img" />
-    <h4>{{ rival.nombre }}</h4>
-    <p> {{ rival.vida }}</p>
+        <button
+          class="mt-3 px-10 py-3 text-lg rounded-xl
+                 bg-red-500 text-white font-bold
+                 animate-pulse disabled:opacity-50"
+          @click="atacarJugador"
+          :disabled="turno !== 'jugador'"
+        >
+          Atacar
+        </button>
+      </div>
 
-    <button class="btn-batalla" disabled>Atacar</button>
-  </div>
-</div>
+      <div class="text-2xl font-bold self-center">VS</div>
+
+      <!-- LADO PC -->
+      <div class="flex flex-col items-center self-start text-center">
+        <h3 class="font-bold mb-2">Oponente</h3>
+
+        <img
+          :src="rival.imagen"
+          class="w-[120px] drop-shadow-xl"
+        />
+
+        <h4 class="font-bold mt-2">{{ rival.nombre }}</h4>
+        <p>{{ rival.vida }}</p>
+
+        <button
+          class="mt-3 px-10 py-3 text-lg rounded-xl
+                 bg-gray-400 text-white cursor-not-allowed"
+          disabled
+        >
+          Atacar
+        </button>
+      </div>
+    </div>
 
     <!-- MENSAJE -->
-    <p class="mensaje">{{ mensaje }}</p>
+    <p class="text-center text-xl font-bold mt-5">
+      {{ mensaje }}
+    </p>
 
-    <!-- VOLVER A BATALLAR -->
-    <div v-if="batallaTerminada" class="reintentar">
-      <button class="btn-batalla animar-boton" @click="reiniciarBatalla">
-         Volver a batallar
+    <!-- MODO SELECCIONADO -->
+    <p
+      v-if="modoSeleccionado"
+      class="text-center mt-3 font-bold text-lg"
+    >
+      🎮 Modo seleccionado:
+      <span class="text-yellow-600">
+        {{ modoSeleccionado === '1v1' ? '1 vs 1' : 'Equipos' }}
+      </span>
+    </p>
+
+    <!-- VOLVER -->
+    <div v-if="batallaTerminada" class="flex justify-center mt-6">
+      <button
+        class="px-10 py-3 text-lg rounded-xl
+               bg-yellow-400 hover:bg-yellow-500
+               text-black font-bold animate-pulse"
+        @click="reiniciarBatalla"
+      >
+        Volver a batallar
       </button>
     </div>
 
     <!-- ZONA INFERIOR -->
-<div v-if="!enBatalla && !batallaTerminada" class="zona-inferior">
+    <div
+      v-if="!enBatalla && !batallaTerminada"
+      class="fixed bottom-8 left-1/2 -translate-x-1/2
+             flex items-center gap-8"
+    >
+      <!-- AMIGOS -->
+      <div
+        class="text-5xl cursor-pointer animate-bounce text-blue-600"
+        @click="mostrarAmigos = true"
+      >
+        <i class="bi bi-people-fill"></i>
+      </div>
 
-  <!-- ICONO AMIGOS (IZQUIERDA) -->
-  <div class="icono animar-icono" @click="mostrarAmigos = true">
-    Amigos
-  </div>
+      <!-- BOTÓN BATALLA -->
+      <button
+        class="px-10 py-3 text-lg rounded-xl
+               bg-yellow-400 hover:bg-yellow-500
+               text-black font-bold animate-pulse
+               disabled:opacity-50"
+        @click="iniciarBatalla"
+        :disabled="!modoSeleccionado || !usuarioLogueado"
+      >
+        Iniciar Batalla
+      </button>
 
-  <!-- BOTÓN BATALLA (CENTRO) -->
-  <button
-    class="btn-batalla animar-boton"
-    @click="iniciarBatalla"
-    :disabled="!modoSeleccionado || !usuarioLogueado"
-  >
-    Iniciar Batalla
-  </button>
-
-  <!-- ICONO MODO (DERECHA) -->
-  <div class="iconos-modo">
-    <div class="icono animar-icono" @click="abrirModal">
-      {{ iconoModo }}
+      <!-- MODO -->
+      <div
+        class="text-5xl cursor-pointer animate-bounce text-purple-600"
+        @click="abrirModal"
+      >
+        <i class="bi bi-controller"></i>
+      </div>
     </div>
-  </div>
 
-</div>
+    <!-- MODAL MODOS -->
+    <div
+      v-if="mostrarModal"
+      class="fixed inset-0 bg-black/70 flex items-center justify-center"
+    >
+      <div
+        class="bg-gradient-to-br from-yellow-400 to-orange-500
+               p-6 rounded-2xl w-[300px]"
+      >
+        <h2 class="text-center font-bold mb-4 text-lg">
+          Modos de juego
+        </h2>
 
-    <!-- MODAL -->
-    <div v-if="mostrarModal" class="modal">
-      <div class="modal-box animar-modal">
-        <h2>Modos de juego</h2>
-
-        <div class="card" @click="seleccionarModo">
-          <span>1 vs 1</span>
-          <span class="trofeo">🏆</span>
+        <div
+          class="bg-white p-4 rounded-xl flex justify-between
+                 cursor-pointer mb-4 hover:bg-yellow-100"
+          @click="seleccionarModo('1v1')"
+        >
+          <span class="font-bold">1 vs 1</span>
+          <i class="bi bi-trophy-fill text-2xl text-yellow-500"></i>
         </div>
 
-        <button class="btn-batalla" @click="mostrarModal = false">
+        <div
+          class="bg-white p-4 rounded-xl flex justify-between
+                 cursor-pointer mb-4 hover:bg-yellow-100"
+          @click="seleccionarModo('equipos')"
+        >
+          <span class="font-bold">Equipos</span>
+          <i class="bi bi-people-fill text-2xl text-blue-600"></i>
+        </div>
+
+        <button
+          class="w-full px-8 py-3 bg-red-500 text-white
+                 font-bold rounded-xl"
+          @click="mostrarModal = false"
+        >
           Cancelar
         </button>
       </div>
     </div>
-<!-- MODAL AMIGOS -->
-<!-- MODAL AMIGOS -->
-<div v-if="mostrarAmigos" class="modal">
-  <div class="modal-box animar-modal">
-    <h2>Amigos en línea</h2>
-
-    <p v-if="amigosOnline.length === 0">
-      No hay amigos en línea todavía
-    </p>
-
-    <div
-      v-for="u in amigosOnline"
-      :key="u.id"
-      class="card"
-      @click="invitar(u)"
-    >
-      <span>{{ u.nombre }}</span>
-      <span>⚔️</span>
-    </div>
-
-    <button class="btn-batalla" @click="mostrarAmigos = false">
-      Cerrar
-    </button>
-  </div>
-</div>
-
 
   </div>
 </template>
@@ -139,7 +187,10 @@ const rival = ref(null)
 const enBatalla = ref(false)
 const batallaTerminada = ref(false)
 const mostrarModal = ref(false)
-const modoSeleccionado = ref(false)
+
+/* 🔥 MODO DE JUEGO */
+const modoSeleccionado = ref(null) // '1v1' | 'equipos'
+
 const mostrarAmigos = ref(false)
 
 const mensaje = ref('')
@@ -151,29 +202,25 @@ const turno = ref('jugador')
 =============================== */
 const amigosIds = ref([])
 
-
 const amigosOnline = computed(() => {
   return usuarios.value.filter(u =>
     amigosIds.value.includes(u.id)
   )
 })
 
-
 onMounted(async () => {
   const usuarioLS = localStorage.getItem('usuario')
 
   if (!usuarioLS) {
-    mensaje.value = ' Debes iniciar sesión'
+    mensaje.value = 'Debes iniciar sesión'
     setTimeout(() => router.push('/login'), 1500)
     return
   }
 
   usuarioLogueado.value = JSON.parse(usuarioLS)
 
-
   await cargarAmigos()
 
- 
   socket.connect()
   socket.emit('registrar', usuarioLogueado.value.id)
 
@@ -202,7 +249,7 @@ const cargarAmigos = async () => {
     const res = await fetch(
       `http://localhost:3000/api/amigos/${usuarioLogueado.value.id}`
     )
-    amigosIds.value = await res.json() // [2,3,5...]
+    amigosIds.value = await res.json()
   } catch (err) {
     console.error('Error cargando amigos', err)
   }
@@ -237,17 +284,34 @@ const cargarPokemon = async (nombre) => {
 /* ===============================
    MODOS
 =============================== */
-const abrirModal = () => mostrarModal.value = true
+const abrirModal = () => {
+  mostrarModal.value = true
+}
 
-const seleccionarModo = () => {
-  iconoModo.value = '🏆'
-  modoSeleccionado.value = true
-  mensaje.value = 'Modo 1 vs 1 seleccionado'
+const seleccionarModo = (modo) => {
+  modoSeleccionado.value = modo
+
+  if (modo === '1v1') {
+    iconoModo.value = '🏆'
+  }
+
+  if (modo === 'equipos') {
+    iconoModo.value = '👥'
+  }
+
+  mensaje.value = '' // evita textos duplicados
   mostrarModal.value = false
 }
 
-
+/* ===============================
+   BATALLA
+=============================== */
 const iniciarBatalla = async () => {
+  if (!modoSeleccionado.value) {
+    mensaje.value = 'Selecciona un modo de juego'
+    return
+  }
+
   const j = JSON.parse(localStorage.getItem('pokemonJugador'))
   const r = JSON.parse(localStorage.getItem('pokemonPC'))
 
@@ -287,182 +351,15 @@ const terminar = (msg) => {
   enBatalla.value = false
   batallaTerminada.value = true
 }
+
+const reiniciarBatalla = () => {
+  jugador.value = null
+  rival.value = null
+  enBatalla.value = false
+  batallaTerminada.value = false
+  mensaje.value = ''
+}
 </script>
 
 
 
-
-<style scoped>
-/* NAVBAR */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: #ef5350;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  z-index: 1000;
-}
-
-.navbar a {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-.navbar i {
-  font-size: 20px;
-}
-
-/* CONTENEDOR */
-.contenedor {
-  min-height: 100vh;
-  padding: 90px 20px 20px;
-  font-family: Arial, sans-serif;
-}
-
-/* ICONOS GRANDES (LO ÚNICO AGREGADO) */
-.icono {
-  font-size: 48px;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* ANIMACIONES */
-.animar-boton {
-  animation: pulse 2s infinite;
-}
-
-.animar-icono {
-  animation: flotar 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
-@keyframes flotar {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0); }
-}
-
-/* ARENA REALISTA */
-.arena {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 30px;
-  min-height: 340px;
-  background: linear-gradient(to top, #4caf50 40%, #81d4fa 60%);
-  border-radius: 20px;
-  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
-}
-
-.usuario {
-  align-self: flex-end;
-}
-
-.pc {
-  align-self: flex-start;
-}
-
-.pokemon {
-  width: 120px;
-  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
-}
-
-.jugador-img {
-  transform: scaleX(-1);
-}
-
-.vs {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-/* MENSAJE */
-.mensaje {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-/* ZONA INFERIOR */
-.zona-inferior {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.btn-batalla {
-  padding: 15px 40px;
-  font-size: 18px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-/* MODAL */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  background: linear-gradient(135deg, #ffcb05, #ff9800);
-  padding: 25px;
-  border-radius: 20px;
-  width: 300px;
-}
-
-.animar-modal {
-  animation: zoom 0.3s ease;
-}
-
-@keyframes zoom {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0;
-  cursor: pointer;
-}
-
-.trofeo {
-  font-size: 26px;
-}
-.zona-inferior {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-</style>
